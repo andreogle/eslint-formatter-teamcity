@@ -53,7 +53,7 @@ console.log(eslintTeamcity(eslintOutput));
 
 ## Configuration
 
-As of version 2.0, there are two different formatters you can use to report with. They have no material
+There are two different formatters you can use to report with. They have no material
 impact on the output - they're just different ways of viewing the same data. The "Code Inspection" tab will only
 appear if you have configured eslint-formatter-teamcity to use the inspections reporter.
 
