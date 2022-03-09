@@ -1,0 +1,6 @@
+*.log
+coverage/
+node_modules/
+.idea/
+.nyc_output/
+.coveralls.yml
