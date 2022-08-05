@@ -5,14 +5,14 @@
 [![Coverage Status](https://coveralls.io/repos/github/andreogle/eslint-formatter-teamcity/badge.svg?branch=main)](https://coveralls.io/github/andreogle/eslint-formatter-teamcity?branch=main)
 [![npm downloads](https://img.shields.io/npm/dm/eslint-formatter-teamcity.svg)](https://www.npmjs.com/package/eslint-formatter-teamcity)
 
-> A small [eslint](https://github.com/eslint/eslint) formatter plugin.
+> A small [ESLint](https://github.com/eslint/eslint) formatter plugin.
 ESLint violations are output nicely in the
 [TeamCity](https://www.jetbrains.com/teamcity/) build error format. Tested with
 TeamCity 9.1.x/10.0.x/2017+ and ESLint 1+
 
 ## Installation
 
-**Node v12+ is required**
+**Node v14+ is required**
 
 Prerequisite: You must have either [npm](https://docs.npmjs.com/getting-started/installing-node#install-npm--manage-npm-versions) or [Yarn](https://yarnpkg.com/en/docs/install) installed.
 
@@ -109,39 +109,17 @@ You can also output your current settings to the log if you set:
 export ESLINT_TEAMCITY_DISPLAY_CONFIG=true
 ```
 
-## [gulp-eslint](https://github.com/adametry/gulp-eslint) integration
-
-```js
-const gulp = require('gulp');
-const eslint = require('gulp-eslint');
-const teamcity = require('eslint-formatter-teamcity');
-
-gulp.task('lint', function () {
-  return gulp.src(['js/**/*.js'])
-    .pipe(eslint())
-    .pipe(eslint.format(teamcity))
-    .pipe(eslint.failAfterError());
-});
-```
-
-See the [gulp-eslint](https://github.com/adametry/gulp-eslint#usage) docs for
-more info on setting up a linting task.
-
-
 ## TeamCity Usage
 
 The simplest way to run eslint-formatter-teamcity is from an npm script in a build step. You could setup a script similar to this:
 
 ```json
 "scripts": {
-  "lint:teamcity": "eslint app/src --format teamcity"
+  "lint:teamcity": "eslint ./src --format teamcity"
 }
 ```
 
-You could also run it as a gulp task (if you use [gulp](https://github.com/gulpjs/gulp) and [gulp-eslint](https://github.com/adametry/gulp-eslint)):
-
-![Example TeamCity Setup](https://i.imgur.com/R3ypYXu.png)
-Kick off a new build, by deploying again, and you should see your build errors - assuming you have any!
+Kick off a new build (by deploying again) and you should see your build errors - assuming you have any!
 
 ## Extras
 
