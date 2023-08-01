@@ -1,6 +1,6 @@
+const path = require('path');
 const { expect } = require('chai');
 const sh = require('shelljs');
-const path = require('path');
 const fs = require('fs-extra');
 const { error } = require('./helpers/eslint-factory');
 
