@@ -43,6 +43,6 @@
     "prettier": "^3.0.0",
     "pretty-quick": "^4.0.0",
     "shelljs": "^0.8.4",
-    "sinon": "^19.0.2"
+    "sinon": "^20.0.0"
   }
 }
