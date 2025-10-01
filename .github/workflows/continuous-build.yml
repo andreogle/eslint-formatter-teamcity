@@ -16,7 +16,7 @@ jobs:
       - name: Clone eslint-formatter-teamcity
         uses: actions/checkout@master
       - name: Check hyperlinks
-        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        uses: umbrelladocs/action-linkspector@v1
 
   lint-test:
     runs-on: ubuntu-latest
