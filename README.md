@@ -12,12 +12,13 @@ TeamCity 9.1.x/10.0.x/2017+ and ESLint 1+
 
 ## Installation
 
-**Node v16+ is required**
-
-Prerequisite: You must have either [npm](https://docs.npmjs.com/getting-started/installing-node#install-npm--manage-npm-versions) or [Yarn](https://yarnpkg.com/en/docs/install) installed.
+**Node v20+ is required**
 
 ```sh
 npm install eslint-formatter-teamcity --save-dev
+yarn add eslint-formatter-teamcity --dev
+pnpm add eslint-formatter-teamcity --save-dev
+bun add eslint-formatter-teamcity --dev
 ```
 
 ## Usage
