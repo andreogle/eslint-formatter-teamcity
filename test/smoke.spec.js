@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const { execSync } = require('child_process');
+const { execSync, execFileSync } = require('child_process');
 const { describe, it, beforeEach, afterEach } = require('node:test');
 const assert = require('node:assert/strict');
 const { error } = require('./helpers/eslint-factory');
@@ -23,7 +23,7 @@ describe('smoke tests', function () {
 
     describe('cmd', function () {
       it('as eslint formatter plugin', { timeout: 8000 }, function () {
-        const result = execSync(`eslint --format '${pathToIndex}' ${pathToIndex}`, {
+        const result = execFileSync('eslint', ['--format', pathToIndex, pathToIndex], {
           encoding: 'utf8',
           cwd: basePath,
         });
@@ -33,7 +33,7 @@ describe('smoke tests', function () {
       it('as standalone', function () {
         fs.writeFileSync(pathToTestJson, JSON.stringify(esLintOutput));
         try {
-          const result = execSync(`node index.js ${pathToTestJson}`, {
+          const result = execFileSync('node', ['index.js', pathToTestJson], {
             encoding: 'utf8',
             cwd: basePath,
           });
