@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('node:path');
 const utils = require('../utils');
 
 /**
@@ -9,52 +9,44 @@ const utils = require('../utils');
  */
 module.exports = (results, config) => {
   const { reportName } = config;
-  const outputList = [];
   let errorCount = 0;
   let warningCount = 0;
 
-  results.forEach((result) => {
+  const inspectionMessages = results.flatMap((result) => {
     const { messages } = result;
 
     if (messages.length === 0) {
-      return;
+      return [];
     }
 
     const relativeFilePath = path.relative(process.cwd(), result.filePath);
     const filePath = utils.escapeTeamCityString(relativeFilePath.replace(/\\/g, '/')); // Ensure slashes on Windows
 
-    messages.forEach((messageObj) => {
+    return messages.flatMap((messageObj) => {
       const { line, column, message, ruleId, fatal, severity } = messageObj;
       const isError = fatal || severity === 2;
+
+      if (isError) {
+        errorCount += 1;
+      } else {
+        warningCount += 1;
+      }
 
       const escapedRuleId = utils.escapeTeamCityString(ruleId || '<none>');
       const escapedMessage = utils.escapeTeamCityString(message);
       const formattedMessage = `line ${line}, col ${column}, ${escapedMessage}`;
-
-      outputList.push(
-        `##teamcity[inspectionType id='${escapedRuleId}' category='${reportName}' name='${escapedRuleId}' description='${reportName}']`
-      );
-
       const severityLevel = isError ? 'ERROR' : 'WARNING';
-      outputList.push(
-        `##teamcity[inspection typeId='${escapedRuleId}' message='${formattedMessage}' ` +
-          `file='${filePath}' line='${line}' SEVERITY='${severityLevel}']`
-      );
 
-      if (!isError) {
-        warningCount += 1;
-      } else {
-        errorCount += 1;
-      }
+      return [
+        `##teamcity[inspectionType id='${escapedRuleId}' category='${reportName}' name='${escapedRuleId}' description='${reportName}']`,
+        `##teamcity[inspection typeId='${escapedRuleId}' message='${formattedMessage}' file='${filePath}' line='${line}' SEVERITY='${severityLevel}']`,
+      ];
     });
   });
 
-  outputList.push(
-    `##teamcity[buildStatisticValue key='${config.errorStatisticsName}' value='${errorCount}']`
-  );
-  outputList.push(
-    `##teamcity[buildStatisticValue key='${config.warningStatisticsName}' value='${warningCount}']`
-  );
-
-  return outputList;
+  return [
+    ...inspectionMessages,
+    `##teamcity[buildStatisticValue key='${config.errorStatisticsName}' value='${errorCount}']`,
+    `##teamcity[buildStatisticValue key='${config.warningStatisticsName}' value='${warningCount}']`,
+  ];
 };

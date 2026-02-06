@@ -1,12 +1,26 @@
 const fs = require('fs');
 
+const escapeReplacements = new Map([
+  ['|', '||'],
+  ["'", "|'"],
+  ['\n', '|n'],
+  ['\r', '|r'],
+  ['\u0085', '|x'], // TeamCity 6
+  ['\u2028', '|l'], // TeamCity 6
+  ['\u2029', '|p'], // TeamCity 6
+  ['[', '|['],
+  [']', '|]'],
+]);
+
+const escapePattern = new RegExp([...escapeReplacements.keys()].map((k) => k.replace(/[|[\]]/g, '\\$&')).join('|'), 'g');
+
 /**
  * Attempt to load package.json within the current directory.
  * @returns {string} The string representation of package.json
  */
-exports.loadPackageJson = () => {
+const loadPackageJson = () => {
   try {
-    return fs.readFileSync('package.json');
+    return fs.readFileSync('package.json', 'utf8');
   } catch (e) {
     console.warn('Unable to load config from package.json');
     // Return the string representation of an empty JSON object,
@@ -22,19 +36,12 @@ exports.loadPackageJson = () => {
  * @param {string} str The raw message to display in TeamCity build log.
  * @returns {string} An error message formatted for display in TeamCity
  */
-exports.escapeTeamCityString = (str) => {
+const escapeTeamCityString = (str) => {
   if (!str) {
     return '';
   }
 
-  return str
-    .replace(/\|/g, '||')
-    .replace(/'/g, "|'")
-    .replace(/\n/g, '|n')
-    .replace(/\r/g, '|r')
-    .replace(/\u0085/g, '|x') // TeamCity 6
-    .replace(/\u2028/g, '|l') // TeamCity 6
-    .replace(/\u2029/g, '|p') // TeamCity 6
-    .replace(/\[/g, '|[')
-    .replace(/\]/g, '|]');
+  return str.replace(escapePattern, (match) => escapeReplacements.get(match));
 };
+
+module.exports = { loadPackageJson, escapeTeamCityString };
