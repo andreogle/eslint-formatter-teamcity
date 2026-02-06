@@ -12,7 +12,7 @@ const escapeReplacements = new Map([
   [']', '|]'],
 ]);
 
-const escapePattern = new RegExp([...escapeReplacements.keys()].map((k) => k.replace(/[|[\]]/g, '\\$&')).join('|'), 'g');
+const escapePattern = new RegExp([...escapeReplacements.keys()].map((k) => k.replace(/[|[\]\\]/g, '\\$&')).join('|'), 'g');
 
 /**
  * Attempt to load package.json within the current directory.
