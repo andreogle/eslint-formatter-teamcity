@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const fs = require('fs-extra');
+const fs = require('fs');
 const formatter = require('./src/formatter');
 
 const procArg = process.argv;
@@ -16,7 +16,7 @@ function main(input, teamcityPropNames) {
 }
 
 if (require.main === module) {
-  process.stdout.write(main(fs.readJSONSync(procArg[2])));
+  process.stdout.write(main(JSON.parse(fs.readFileSync(procArg[2], 'utf8'))));
 } else {
   module.exports = main;
 }

@@ -1,7 +1,8 @@
 const path = require('path');
-const { expect } = require('chai');
-const sh = require('shelljs');
-const fs = require('fs-extra');
+const fs = require('fs');
+const { execSync } = require('child_process');
+const { describe, it, beforeEach, afterEach } = require('node:test');
+const assert = require('node:assert/strict');
 const { error } = require('./helpers/eslint-factory');
 
 const basePath = path.resolve(__dirname, '..');
@@ -21,26 +22,32 @@ describe('smoke tests', function () {
     });
 
     describe('cmd', function () {
-      it('as eslint formatter plugin', function () {
-        this.timeout(8000);
-        const result = sh.exec(`eslint --format '${pathToIndex}' ${pathToIndex}`);
-        expect(result.stdout).to.contain('##teamcity');
+      it('as eslint formatter plugin', { timeout: 8000 }, function () {
+        const result = execSync(`eslint --format '${pathToIndex}' ${pathToIndex}`, {
+          encoding: 'utf8',
+          cwd: basePath,
+        });
+        assert.ok(result.includes('##teamcity'));
       });
 
       it('as standalone', function () {
-        fs.writeJSONSync(pathToTestJson, esLintOutput);
-        const result = sh.exec(`cd ${basePath}; node index.js ${pathToTestJson}`);
-        expect(result.stdout).to.contain('##teamcity');
-        expect(result.stderr).to.equal('');
-
-        sh.rm(pathToTestJson);
+        fs.writeFileSync(pathToTestJson, JSON.stringify(esLintOutput));
+        try {
+          const result = execSync(`node index.js ${pathToTestJson}`, {
+            encoding: 'utf8',
+            cwd: basePath,
+          });
+          assert.ok(result.includes('##teamcity'));
+        } finally {
+          fs.unlinkSync(pathToTestJson);
+        }
       });
     });
 
     describe('requirejs', function () {
       it('basic', function () {
         const result = require(pathToIndex)(esLintOutput);
-        expect(result).to.contain('##teamcity');
+        assert.ok(result.includes('##teamcity'));
       });
 
       it('with parameters', function () {
@@ -50,9 +57,9 @@ describe('smoke tests', function () {
         };
 
         const result = require(pathToIndex)(esLintOutput, teamcityPropNames);
-        expect(result).to.contain('ESLint Violations');
-        expect(result).to.contain('EslintInspectionStatsE');
-        expect(result).to.contain('EslintInspectionStatsW');
+        assert.ok(result.includes('ESLint Violations'));
+        assert.ok(result.includes('EslintInspectionStatsE'));
+        assert.ok(result.includes('EslintInspectionStatsW'));
       });
     });
   });
