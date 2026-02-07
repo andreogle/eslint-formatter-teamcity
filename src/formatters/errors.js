@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('node:path');
 const utils = require('../utils');
 
 /**
@@ -9,23 +9,18 @@ const utils = require('../utils');
  */
 module.exports = (results, config) => {
   const { reportName } = config;
-  const outputList = [];
   let errorCount = 0;
   let warningCount = 0;
 
-  outputList.push(`##teamcity[testSuiteStarted name='${reportName}']`);
-
-  results.forEach((result) => {
+  const fileMessages = results.flatMap((result) => {
     const { messages } = result;
 
     if (messages.length === 0) {
-      return;
+      return [];
     }
 
     const relativeFilePath = path.relative(process.cwd(), result.filePath);
     const filePath = utils.escapeTeamCityString(relativeFilePath.replace(/\\/g, '/')); // Ensure slashes on Windows
-
-    outputList.push(`##teamcity[testStarted name='${reportName}: ${filePath}']`);
 
     const errorsList = [];
     const warningsList = [];
@@ -38,41 +33,42 @@ module.exports = (results, config) => {
       }`;
 
       const isError = fatal || severity === 2;
-      if (!isError) {
-        warningsList.push(formattedMessage);
-        warningCount += 1;
-      } else {
+      if (isError) {
         errorsList.push(formattedMessage);
         errorCount += 1;
+      } else {
+        warningsList.push(formattedMessage);
+        warningCount += 1;
       }
     });
+
+    const lines = [`##teamcity[testStarted name='${reportName}: ${filePath}']`];
 
     // Group errors and warnings together per file
     if (errorsList.length) {
       const errors = utils.escapeTeamCityString(errorsList.join('\n'));
-      outputList.push(
+      lines.push(
         `##teamcity[testFailed name='${reportName}: ${filePath}' message='${errors}']`
       );
     }
 
     if (warningsList.length) {
       const warnings = utils.escapeTeamCityString(warningsList.join('\n'));
-      outputList.push(
+      lines.push(
         `##teamcity[testStdOut name='${reportName}: ${filePath}' out='warning: ${warnings}']`
       );
     }
 
-    outputList.push(`##teamcity[testFinished name='${reportName}: ${filePath}']`);
+    lines.push(`##teamcity[testFinished name='${reportName}: ${filePath}']`);
+
+    return lines;
   });
 
-  outputList.push(`##teamcity[testSuiteFinished name='${reportName}']`);
-
-  outputList.push(
-    `##teamcity[buildStatisticValue key='${config.errorStatisticsName}' value='${errorCount}']`
-  );
-  outputList.push(
-    `##teamcity[buildStatisticValue key='${config.warningStatisticsName}' value='${warningCount}']`
-  );
-
-  return outputList;
+  return [
+    `##teamcity[testSuiteStarted name='${reportName}']`,
+    ...fileMessages,
+    `##teamcity[testSuiteFinished name='${reportName}']`,
+    `##teamcity[buildStatisticValue key='${config.errorStatisticsName}' value='${errorCount}']`,
+    `##teamcity[buildStatisticValue key='${config.warningStatisticsName}' value='${warningCount}']`,
+  ];
 };

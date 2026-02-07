@@ -1,5 +1,5 @@
-const sinon = require('sinon');
-const { expect } = require('chai');
+const { describe, it, beforeEach, afterEach, mock } = require('node:test');
+const assert = require('node:assert/strict');
 const { error } = require('./helpers/eslint-factory');
 const utils = require('../src/utils/index');
 const format = require('../src/formatter');
@@ -16,35 +16,41 @@ describe('formatter', function () {
       eslintInput = [];
     });
 
-    context('prop names', function () {
+    describe('prop names', function () {
       it('sets the reporter', function () {
         const output = format(eslintInput, { reporter: 'inspections' });
-        expect(output).to.include(
-          "##teamcity[inspectionType id='no-console' category='ESLint Violations' name='no-console' description='ESLint Violations']"
+        assert.ok(
+          output.includes(
+            "##teamcity[inspectionType id='no-console' category='ESLint Violations' name='no-console' description='ESLint Violations']"
+          )
         );
-        expect(output).to.include(
-          "##teamcity[inspection typeId='no-console' message='line 1, col 1, |'|n|r|x|l|p|||[|]' file='testfile.js' line='1' SEVERITY='ERROR']"
+        assert.ok(
+          output.includes(
+            "##teamcity[inspection typeId='no-console' message='line 1, col 1, |'|n|r|x|l|p|||[|]' file='testfile.js' line='1' SEVERITY='ERROR']"
+          )
         );
       });
 
       it('sets the report name', function () {
         const output = format(eslintInput, { reportName: 'prop report name' });
-        expect(output).to.include("##teamcity[testSuiteStarted name='prop report name']");
-        expect(output).to.include("##teamcity[testSuiteFinished name='prop report name']");
+        assert.ok(output.includes("##teamcity[testSuiteStarted name='prop report name']"));
+        assert.ok(output.includes("##teamcity[testSuiteFinished name='prop report name']"));
       });
 
       it('sets the error count name', function () {
         const output = format(eslintInput, { errorStatisticsName: 'prop errors' });
-        expect(output).to.include("##teamcity[buildStatisticValue key='prop errors' value='2']");
+        assert.ok(output.includes("##teamcity[buildStatisticValue key='prop errors' value='2']"));
       });
 
       it('sets the warning count name', function () {
         const output = format(eslintInput, { warningStatisticsName: 'prop warnings' });
-        expect(output).to.include("##teamcity[buildStatisticValue key='prop warnings' value='0']");
+        assert.ok(
+          output.includes("##teamcity[buildStatisticValue key='prop warnings' value='0']")
+        );
       });
     });
 
-    context('package.json', function () {
+    describe('package.json', function () {
       beforeEach(function () {
         const jsonConfig = JSON.stringify({
           'eslint-formatter-teamcity': {
@@ -54,43 +60,51 @@ describe('formatter', function () {
             'warning-statistics-name': 'package.json warnings',
           },
         });
-        sinon.stub(utils, 'loadPackageJson').callsFake(() => jsonConfig);
+        mock.method(utils, 'loadPackageJson', () => jsonConfig);
       });
 
       afterEach(function () {
-        utils.loadPackageJson.restore();
+        mock.restoreAll();
       });
 
       it('sets the report type', function () {
         const output = format(eslintInput);
-        expect(output).to.include(
-          "##teamcity[inspection typeId='no-console' message='line 1, col 1, |'|n|r|x|l|p|||[|]' file='testfile.js' line='1' SEVERITY='ERROR']"
+        assert.ok(
+          output.includes(
+            "##teamcity[inspection typeId='no-console' message='line 1, col 1, |'|n|r|x|l|p|||[|]' file='testfile.js' line='1' SEVERITY='ERROR']"
+          )
         );
       });
 
       it('sets the report name', function () {
         const output = format(eslintInput);
-        expect(output).to.include(
-          "##teamcity[inspectionType id='no-console' category='package.json report' name='no-console' description='package.json report']"
+        assert.ok(
+          output.includes(
+            "##teamcity[inspectionType id='no-console' category='package.json report' name='no-console' description='package.json report']"
+          )
         );
       });
 
       it('sets the error count name', function () {
         const output = format(eslintInput);
-        expect(output).to.include(
-          "##teamcity[buildStatisticValue key='package.json errors' value='2']"
+        assert.ok(
+          output.includes(
+            "##teamcity[buildStatisticValue key='package.json errors' value='2']"
+          )
         );
       });
 
       it('sets the warning count name', function () {
         const output = format(eslintInput);
-        expect(output).to.include(
-          "##teamcity[buildStatisticValue key='package.json warnings' value='0']"
+        assert.ok(
+          output.includes(
+            "##teamcity[buildStatisticValue key='package.json warnings' value='0']"
+          )
         );
       });
     });
 
-    context('process.env', function () {
+    describe('process.env', function () {
       function cleanup() {
         delete process.env.ESLINT_TEAMCITY_REPORTER;
         delete process.env.ESLINT_TEAMCITY_REPORT_NAME;
@@ -104,58 +118,68 @@ describe('formatter', function () {
       it('sets the report type', function () {
         process.env.ESLINT_TEAMCITY_REPORTER = 'inspections';
         const output = format(eslintInput);
-        expect(output).to.include(
-          "##teamcity[inspection typeId='no-console' message='line 1, col 1, |'|n|r|x|l|p|||[|]' file='testfile.js' line='1' SEVERITY='ERROR']"
+        assert.ok(
+          output.includes(
+            "##teamcity[inspection typeId='no-console' message='line 1, col 1, |'|n|r|x|l|p|||[|]' file='testfile.js' line='1' SEVERITY='ERROR']"
+          )
         );
       });
 
       it('sets the report name', function () {
         process.env.ESLINT_TEAMCITY_REPORT_NAME = 'process.env report';
         const output = format(eslintInput);
-        expect(output).to.include("##teamcity[testSuiteStarted name='process.env report']");
-        expect(output).to.include("##teamcity[testSuiteFinished name='process.env report']");
+        assert.ok(output.includes("##teamcity[testSuiteStarted name='process.env report']"));
+        assert.ok(output.includes("##teamcity[testSuiteFinished name='process.env report']"));
       });
 
       it('sets the error count name', function () {
         process.env.ESLINT_TEAMCITY_ERROR_STATISTICS_NAME = 'process.env errors';
         const output = format(eslintInput);
-        expect(output).to.include(
-          "##teamcity[buildStatisticValue key='process.env errors' value='2']"
+        assert.ok(
+          output.includes(
+            "##teamcity[buildStatisticValue key='process.env errors' value='2']"
+          )
         );
       });
 
       it('sets the warning count name', function () {
         process.env.ESLINT_TEAMCITY_WARNING_STATISTICS_NAME = 'process.env warnings';
         const output = format(eslintInput);
-        expect(output).to.include(
-          "##teamcity[buildStatisticValue key='process.env warnings' value='0']"
+        assert.ok(
+          output.includes(
+            "##teamcity[buildStatisticValue key='process.env warnings' value='0']"
+          )
         );
       });
     });
 
-    context('defaults', function () {
+    describe('defaults', function () {
       it('uses the error reporter', function () {
         const output = format(eslintInput);
-        expect(output).to.include("##teamcity[testSuiteStarted name='ESLint Violations']");
+        assert.ok(output.includes("##teamcity[testSuiteStarted name='ESLint Violations']"));
       });
 
       it('sets the report name', function () {
         const output = format(eslintInput);
-        expect(output).to.include("##teamcity[testSuiteStarted name='ESLint Violations']");
-        expect(output).to.include("##teamcity[testSuiteFinished name='ESLint Violations']");
+        assert.ok(output.includes("##teamcity[testSuiteStarted name='ESLint Violations']"));
+        assert.ok(output.includes("##teamcity[testSuiteFinished name='ESLint Violations']"));
       });
 
       it('sets the error count name', () => {
         const output = format(eslintInput);
-        expect(output).to.include(
-          "##teamcity[buildStatisticValue key='ESLint Error Count' value='2']"
+        assert.ok(
+          output.includes(
+            "##teamcity[buildStatisticValue key='ESLint Error Count' value='2']"
+          )
         );
       });
 
       it('sets the warning count name', function () {
         const output = format(eslintInput);
-        expect(output).to.include(
-          "##teamcity[buildStatisticValue key='ESLint Warning Count' value='0']"
+        assert.ok(
+          output.includes(
+            "##teamcity[buildStatisticValue key='ESLint Warning Count' value='0']"
+          )
         );
       });
     });

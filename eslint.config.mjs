@@ -5,7 +5,6 @@ export default defineConfig([globalIgnores(["**/coverage/"]), {
   languageOptions: {
     globals: {
       ...globals.node,
-      ...globals.mocha,
     },
   },
 
@@ -15,7 +14,6 @@ export default defineConfig([globalIgnores(["**/coverage/"]), {
     "comma-dangle": 0,
     "func-names": 0,
     "function-paren-newline": 0,
-    "global-require": 0,
 
     "no-console": [1, {
       allow: ["info", "warn", "error"],

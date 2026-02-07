@@ -2,6 +2,19 @@ const utils = require('./utils');
 const formatErrors = require('./formatters/errors');
 const formatInspections = require('./formatters/inspections');
 
+const formatters = {
+  inspections: formatInspections,
+  errors: formatErrors,
+};
+
+/**
+ * Resolve a single config value using the priority chain:
+ * prop → package.json → env → default
+ */
+function resolveConfigValue(prop, packageJsonValue, envVar, defaultValue) {
+  return prop || packageJsonValue || process.env[envVar] || defaultValue;
+}
+
 /**
  * Determines the config to be used by the respective formatter
  * Config is selected based on the following priority:
@@ -16,26 +29,18 @@ function getUserConfig(propNames) {
   // Attempt to load package.json from current directory
   const config = JSON.parse(utils.loadPackageJson())['eslint-formatter-teamcity'] || {};
 
-  const reporter =
-    propNames.reporter || config.reporter || process.env.ESLINT_TEAMCITY_REPORTER || 'errors';
-
-  const reportName =
-    propNames.reportName ||
-    config['report-name'] ||
-    process.env.ESLINT_TEAMCITY_REPORT_NAME ||
-    'ESLint Violations';
-
-  const errorStatisticsName =
-    propNames.errorStatisticsName ||
-    config['error-statistics-name'] ||
-    process.env.ESLINT_TEAMCITY_ERROR_STATISTICS_NAME ||
-    'ESLint Error Count';
-
-  const warningStatisticsName =
-    propNames.warningStatisticsName ||
-    config['warning-statistics-name'] ||
-    process.env.ESLINT_TEAMCITY_WARNING_STATISTICS_NAME ||
-    'ESLint Warning Count';
+  const reporter = resolveConfigValue(
+    propNames.reporter, config.reporter, 'ESLINT_TEAMCITY_REPORTER', 'errors'
+  );
+  const reportName = resolveConfigValue(
+    propNames.reportName, config['report-name'], 'ESLINT_TEAMCITY_REPORT_NAME', 'ESLint Violations'
+  );
+  const errorStatisticsName = resolveConfigValue(
+    propNames.errorStatisticsName, config['error-statistics-name'], 'ESLINT_TEAMCITY_ERROR_STATISTICS_NAME', 'ESLint Error Count'
+  );
+  const warningStatisticsName = resolveConfigValue(
+    propNames.warningStatisticsName, config['warning-statistics-name'], 'ESLINT_TEAMCITY_WARNING_STATISTICS_NAME', 'ESLint Warning Count'
+  );
 
   return {
     reporter,
@@ -52,25 +57,15 @@ function getUserConfig(propNames) {
  * config settings
  * @returns {string} The concatenated output of all messages to display in TeamCity
  */
-function getTeamCityOutput(results, propNames) {
-  const config = getUserConfig(propNames || {});
+function getTeamCityOutput(results, propNames = {}) {
+  const config = getUserConfig(propNames);
 
   if (process.env.ESLINT_TEAMCITY_DISPLAY_CONFIG) {
     console.info(`Running ESLint Teamcity with config: ${JSON.stringify(config, null, 4)}`);
   }
 
-  let outputMessages = [];
-  switch (config.reporter.toLowerCase()) {
-    case 'inspections': {
-      outputMessages = formatInspections(results, config);
-      break;
-    }
-    case 'errors':
-    default: {
-      outputMessages = formatErrors(results, config);
-      break;
-    }
-  }
+  const format = formatters[config.reporter.toLowerCase()] || formatErrors;
+  const outputMessages = format(results, config);
 
   return outputMessages.join('\n');
 }
