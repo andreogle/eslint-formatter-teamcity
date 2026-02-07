@@ -12,13 +12,8 @@ TeamCity 9.1.x/10.0.x/2017+ and ESLint 1+
 
 ## Installation
 
-**Node v20+ is required**
-
 ```sh
 npm install eslint-formatter-teamcity --save-dev
-yarn add eslint-formatter-teamcity --dev
-pnpm add eslint-formatter-teamcity --save-dev
-bun add eslint-formatter-teamcity --dev
 ```
 
 ## Usage
@@ -45,10 +40,15 @@ Run eslint-formatter-teamcity against your new report:
 node ./node_modules/eslint-formatter-teamcity/index.js result.json
 ```
 
-### 3. Requiring and running directly from inside your JavaScript code:
+### 3. Importing and running directly from inside your JavaScript code:
 
 ```javascript
+// ESM
+import eslintTeamcity from 'eslint-formatter-teamcity';
+
+// CommonJS
 const eslintTeamcity = require('eslint-formatter-teamcity');
+
 console.log(eslintTeamcity(eslintOutput));
 ```
 
@@ -67,10 +67,11 @@ Settings are looked for in the following priority:
 
 ### 1. As a second argument
 
-If you run eslint-formatter-teamcity by requiring it in JavaScript, you can pass a second argument to the function:
+If you run eslint-formatter-teamcity by importing it in JavaScript, you can pass a second argument to the function:
 
 ```js
-const eslintTeamcity = require('eslint-formatter-teamcity');
+import eslintTeamcity from 'eslint-formatter-teamcity';
+
 const options = {
   reporter: 'inspections', // default: 'errors'
   reportName: 'My ESLint Violations', // default: 'ESLint Violations'
