@@ -153,6 +153,35 @@ describe('formatter', function () {
       });
     });
 
+    describe('unknown reporter', function () {
+      it('falls back to error reporter for unknown reporter names', function () {
+        const output = format(eslintInput, { reporter: 'nonexistent' });
+        assert.ok(output.includes("##teamcity[testSuiteStarted name='ESLint Violations']"));
+      });
+    });
+
+    describe('display config', function () {
+      function cleanup() {
+        delete process.env.ESLINT_TEAMCITY_DISPLAY_CONFIG;
+      }
+
+      beforeEach(() => cleanup());
+      afterEach(() => cleanup());
+
+      it('logs config to console when ESLINT_TEAMCITY_DISPLAY_CONFIG is set', function () {
+        process.env.ESLINT_TEAMCITY_DISPLAY_CONFIG = '1';
+        const calls = [];
+        mock.method(console, 'info', (...args) => calls.push(args));
+
+        format(eslintInput);
+
+        assert.strictEqual(calls.length, 1);
+        assert.ok(calls[0][0].includes('Running ESLint Teamcity with config:'));
+
+        mock.restoreAll();
+      });
+    });
+
     describe('defaults', function () {
       it('uses the error reporter', function () {
         const output = format(eslintInput);

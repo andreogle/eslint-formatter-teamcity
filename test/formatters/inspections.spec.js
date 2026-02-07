@@ -11,6 +11,15 @@ describe('inspection formatting', function () {
     warningStatisticsName: 'ESLintWarningCount',
   };
 
+  describe('empty results', function () {
+    it('should skip results with no messages', function () {
+      const results = [{ filePath: 'empty.js', messages: [] }, error];
+      const outputList = formatInspections(results, reportConfig);
+      assert.ok(!outputList.some((line) => line.includes('empty.js')));
+      assert.ok(outputList.some((line) => line.includes('testfile.js')));
+    });
+  });
+
   describe('unknown error output', function () {
     it('sets id and name to <none> if ruleId is null', function () {
       const results = [unknownError];
