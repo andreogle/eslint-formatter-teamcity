@@ -8,10 +8,17 @@
     "url": "https://github.com/andreogle/eslint-formatter-teamcity/issues"
   },
   "main": "index.js",
+  "types": "index.d.ts",
   "exports": {
     ".": {
-      "import": "./index.mjs",
-      "require": "./index.js"
+      "import": {
+        "types": "./index.d.mts",
+        "default": "./index.mjs"
+      },
+      "require": {
+        "types": "./index.d.ts",
+        "default": "./index.js"
+      }
     }
   },
   "scripts": {
