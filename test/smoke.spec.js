@@ -8,6 +8,7 @@ const { error } = require('./helpers/eslint-factory');
 const basePath = path.resolve(__dirname, '..');
 const pathToTestJson = path.resolve(__dirname, 'result.json');
 const pathToIndex = path.resolve(__dirname, '..', 'index.js');
+const pathToEslint = path.resolve(__dirname, '..', 'node_modules', '.bin', 'eslint');
 
 describe('smoke tests', function () {
   describe('support interface', function () {
@@ -23,7 +24,7 @@ describe('smoke tests', function () {
 
     describe('cmd', function () {
       it('as eslint formatter plugin', { timeout: 8000 }, function () {
-        const result = execFileSync('eslint', ['--format', pathToIndex, pathToIndex], {
+        const result = execFileSync(pathToEslint, ['--format', pathToIndex, pathToIndex], {
           encoding: 'utf8',
           cwd: basePath,
         });
