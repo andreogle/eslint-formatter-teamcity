@@ -1,9 +1,9 @@
 # eslint-formatter-teamcity
 
-[![npm version](https://badge.fury.io/js/eslint-formatter-teamcity.svg)](https://www.npmjs.com/package/eslint-formatter-teamcity)
+[![NPM version](https://badge.fury.io/js/eslint-formatter-teamcity.svg)](https://www.npmjs.com/package/eslint-formatter-teamcity)
 [![Build Status](https://github.com/andreogle/eslint-formatter-teamcity/actions/workflows/continuous-build.yml/badge.svg)](https://github.com/andreogle/eslint-formatter-teamcity/actions/workflows/continuous-build.yml)
 [![Coverage Status](https://coveralls.io/repos/github/andreogle/eslint-formatter-teamcity/badge.svg?branch=main)](https://coveralls.io/github/andreogle/eslint-formatter-teamcity?branch=main)
-[![npm downloads](https://img.shields.io/npm/dm/eslint-formatter-teamcity.svg)](https://www.npmjs.com/package/eslint-formatter-teamcity)
+[![NPM downloads](https://img.shields.io/npm/dm/eslint-formatter-teamcity.svg)](https://npm-stat.com/charts.html?package=eslint-formatter-teamcity)
 
 > A small [ESLint](https://github.com/eslint/eslint) formatter plugin.
 ESLint violations are output nicely in the
@@ -113,7 +113,7 @@ export ESLINT_TEAMCITY_DISPLAY_CONFIG=true
 
 ## TeamCity Usage
 
-The simplest way to run eslint-formatter-teamcity is from an npm script in a build step. You could setup a script similar to this:
+The simplest way to run eslint-formatter-teamcity is from an NPM script in a build step. You could setup a script similar to this:
 
 ```json
 "scripts": {
