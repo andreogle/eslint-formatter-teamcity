@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [22.x, 24.x]
+        node-version: [22.x, 24.x, 26.x]
     name: Build (${{ matrix.node-version }})
     steps:
       - name: Clone eslint-formatter-teamcity
