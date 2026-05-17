@@ -30,7 +30,7 @@ describe('utils', function () {
     it('replaces TeamCity special characters', function () {
       assert.strictEqual(
         utils.escapeTeamCityString("'\n\r\u0085\u2028\u2029|[]"),
-        "|'|n|r|x|l|p|||[|]"
+        "|'|n|r|x|l|p|||[|]",
       );
     });
   });

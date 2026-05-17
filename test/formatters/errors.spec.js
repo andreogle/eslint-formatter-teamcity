@@ -14,14 +14,14 @@ describe('error formatting', function () {
     it('should include the test suite name header', function () {
       assert.strictEqual(
         formatErrors([], reportConfig)[0],
-        "##teamcity[testSuiteStarted name='ESLint Violations']"
+        "##teamcity[testSuiteStarted name='ESLint Violations']",
       );
     });
 
     it('should include the test suite name footer', function () {
       assert.strictEqual(
         formatErrors([], reportConfig)[1],
-        "##teamcity[testSuiteFinished name='ESLint Violations']"
+        "##teamcity[testSuiteFinished name='ESLint Violations']",
       );
     });
   });
@@ -31,11 +31,11 @@ describe('error formatting', function () {
       const results = [unknownError];
       assert.strictEqual(
         formatErrors(results, reportConfig)[1],
-        "##teamcity[testStarted name='ESLint Violations: testfile-unknown.js']"
+        "##teamcity[testStarted name='ESLint Violations: testfile-unknown.js']",
       );
       assert.strictEqual(
         formatErrors(results, reportConfig)[2],
-        "##teamcity[testFailed name='ESLint Violations: testfile-unknown.js' message='line 1, col 1, Some unknown error']"
+        "##teamcity[testFailed name='ESLint Violations: testfile-unknown.js' message='line 1, col 1, Some unknown error']",
       );
     });
   });
@@ -45,7 +45,7 @@ describe('error formatting', function () {
       const results = [fatalError];
       assert.strictEqual(
         formatErrors(results, reportConfig)[1],
-        "##teamcity[testStarted name='ESLint Violations: testfile-fatal.js']"
+        "##teamcity[testStarted name='ESLint Violations: testfile-fatal.js']",
       );
     });
 
@@ -53,7 +53,7 @@ describe('error formatting', function () {
       const results = [fatalError];
       assert.strictEqual(
         formatErrors(results, reportConfig)[2],
-        "##teamcity[testFailed name='ESLint Violations: testfile-fatal.js' message='line 1, col 1, Some fatal error (no-eval)']"
+        "##teamcity[testFailed name='ESLint Violations: testfile-fatal.js' message='line 1, col 1, Some fatal error (no-eval)']",
       );
     });
 
@@ -61,7 +61,7 @@ describe('error formatting', function () {
       const results = [fatalError];
       assert.strictEqual(
         formatErrors(results, reportConfig)[3],
-        "##teamcity[testFinished name='ESLint Violations: testfile-fatal.js']"
+        "##teamcity[testFinished name='ESLint Violations: testfile-fatal.js']",
       );
     });
   });
@@ -71,7 +71,7 @@ describe('error formatting', function () {
       const results = [error];
       assert.strictEqual(
         formatErrors(results, reportConfig)[1],
-        "##teamcity[testStarted name='ESLint Violations: testfile.js']"
+        "##teamcity[testStarted name='ESLint Violations: testfile.js']",
       );
     });
 
@@ -79,7 +79,7 @@ describe('error formatting', function () {
       const results = [error];
       assert.strictEqual(
         formatErrors(results, reportConfig)[2],
-        "##teamcity[testFailed name='ESLint Violations: testfile.js' message='line 1, col 1, |'|n|r|x|l|p|||[|] (no-console)|nline 2, col 1, This is a test error. (no-unreachable)']"
+        "##teamcity[testFailed name='ESLint Violations: testfile.js' message='line 1, col 1, |'|n|r|x|l|p|||[|] (no-console)|nline 2, col 1, This is a test error. (no-unreachable)']",
       );
     });
 
@@ -87,7 +87,7 @@ describe('error formatting', function () {
       const results = [error];
       assert.strictEqual(
         formatErrors(results, reportConfig)[3],
-        "##teamcity[testFinished name='ESLint Violations: testfile.js']"
+        "##teamcity[testFinished name='ESLint Violations: testfile.js']",
       );
     });
   });
@@ -98,11 +98,11 @@ describe('error formatting', function () {
       const outputList = formatErrors(results, reportConfig);
       assert.strictEqual(
         outputList[1],
-        "##teamcity[testStarted name='ESLint Violations: path/with/backslash/file.js']"
+        "##teamcity[testStarted name='ESLint Violations: path/with/backslash/file.js']",
       );
       assert.strictEqual(
         outputList[2],
-        "##teamcity[testFailed name='ESLint Violations: path/with/backslash/file.js' message='line 1, col 1, Some fatal error (no-eval)']"
+        "##teamcity[testFailed name='ESLint Violations: path/with/backslash/file.js' message='line 1, col 1, Some fatal error (no-eval)']",
       );
     });
   });
@@ -112,7 +112,7 @@ describe('error formatting', function () {
       const results = [warning];
       assert.strictEqual(
         formatErrors(results, reportConfig)[1],
-        "##teamcity[testStarted name='ESLint Violations: testfile-warning.js']"
+        "##teamcity[testStarted name='ESLint Violations: testfile-warning.js']",
       );
     });
 
@@ -120,7 +120,7 @@ describe('error formatting', function () {
       const results = [warning];
       assert.strictEqual(
         formatErrors(results, reportConfig)[2],
-        "##teamcity[testStdOut name='ESLint Violations: testfile-warning.js' out='warning: line 1, col 1, Some warning (eqeqeq)|nline 2, col 2, This is a test warning. (complexity)']"
+        "##teamcity[testStdOut name='ESLint Violations: testfile-warning.js' out='warning: line 1, col 1, Some warning (eqeqeq)|nline 2, col 2, This is a test warning. (complexity)']",
       );
     });
 
@@ -128,7 +128,7 @@ describe('error formatting', function () {
       const results = [warning];
       assert.strictEqual(
         formatErrors(results, reportConfig)[3],
-        "##teamcity[testFinished name='ESLint Violations: testfile-warning.js']"
+        "##teamcity[testFinished name='ESLint Violations: testfile-warning.js']",
       );
     });
   });
@@ -138,7 +138,7 @@ describe('error formatting', function () {
       const results = [warning, error];
       assert.strictEqual(
         formatErrors(results, reportConfig)[8],
-        "##teamcity[buildStatisticValue key='ESLintErrorCount' value='2']"
+        "##teamcity[buildStatisticValue key='ESLintErrorCount' value='2']",
       );
     });
 
@@ -146,7 +146,7 @@ describe('error formatting', function () {
       const results = [warning, error];
       assert.strictEqual(
         formatErrors(results, reportConfig)[9],
-        "##teamcity[buildStatisticValue key='ESLintWarningCount' value='2']"
+        "##teamcity[buildStatisticValue key='ESLintWarningCount' value='2']",
       );
     });
   });

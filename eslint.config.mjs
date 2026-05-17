@@ -1,11 +1,9 @@
 import { defineConfig, globalIgnores } from "eslint/config";
-import globals from "globals";
+import importX from "eslint-plugin-import-x";
 
 export default defineConfig([globalIgnores(["**/coverage/"]), {
-  languageOptions: {
-    globals: {
-      ...globals.node,
-    },
+  plugins: {
+    "import-x": importX,
   },
 
   rules: {
@@ -23,6 +21,6 @@ export default defineConfig([globalIgnores(["**/coverage/"]), {
     "operator-linebreak": 0,
     "prefer-arrow-callback": 0,
     "space-before-function-paren": 0,
-    "import/no-dynamic-require": 0,
+    "import-x/no-dynamic-require": 0,
   },
 }]);

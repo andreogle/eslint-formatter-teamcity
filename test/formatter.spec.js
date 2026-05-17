@@ -21,13 +21,13 @@ describe('formatter', function () {
         const output = format(eslintInput, { reporter: 'inspections' });
         assert.ok(
           output.includes(
-            "##teamcity[inspectionType id='no-console' category='ESLint Violations' name='no-console' description='ESLint Violations']"
-          )
+            "##teamcity[inspectionType id='no-console' category='ESLint Violations' name='no-console' description='ESLint Violations']",
+          ),
         );
         assert.ok(
           output.includes(
-            "##teamcity[inspection typeId='no-console' message='line 1, col 1, |'|n|r|x|l|p|||[|]' file='testfile.js' line='1' SEVERITY='ERROR']"
-          )
+            "##teamcity[inspection typeId='no-console' message='line 1, col 1, |'|n|r|x|l|p|||[|]' file='testfile.js' line='1' SEVERITY='ERROR']",
+          ),
         );
       });
 
@@ -44,9 +44,7 @@ describe('formatter', function () {
 
       it('sets the warning count name', function () {
         const output = format(eslintInput, { warningStatisticsName: 'prop warnings' });
-        assert.ok(
-          output.includes("##teamcity[buildStatisticValue key='prop warnings' value='0']")
-        );
+        assert.ok(output.includes("##teamcity[buildStatisticValue key='prop warnings' value='0']"));
       });
     });
 
@@ -71,8 +69,8 @@ describe('formatter', function () {
         const output = format(eslintInput);
         assert.ok(
           output.includes(
-            "##teamcity[inspection typeId='no-console' message='line 1, col 1, |'|n|r|x|l|p|||[|]' file='testfile.js' line='1' SEVERITY='ERROR']"
-          )
+            "##teamcity[inspection typeId='no-console' message='line 1, col 1, |'|n|r|x|l|p|||[|]' file='testfile.js' line='1' SEVERITY='ERROR']",
+          ),
         );
       });
 
@@ -80,26 +78,22 @@ describe('formatter', function () {
         const output = format(eslintInput);
         assert.ok(
           output.includes(
-            "##teamcity[inspectionType id='no-console' category='package.json report' name='no-console' description='package.json report']"
-          )
+            "##teamcity[inspectionType id='no-console' category='package.json report' name='no-console' description='package.json report']",
+          ),
         );
       });
 
       it('sets the error count name', function () {
         const output = format(eslintInput);
         assert.ok(
-          output.includes(
-            "##teamcity[buildStatisticValue key='package.json errors' value='2']"
-          )
+          output.includes("##teamcity[buildStatisticValue key='package.json errors' value='2']"),
         );
       });
 
       it('sets the warning count name', function () {
         const output = format(eslintInput);
         assert.ok(
-          output.includes(
-            "##teamcity[buildStatisticValue key='package.json warnings' value='0']"
-          )
+          output.includes("##teamcity[buildStatisticValue key='package.json warnings' value='0']"),
         );
       });
     });
@@ -120,8 +114,8 @@ describe('formatter', function () {
         const output = format(eslintInput);
         assert.ok(
           output.includes(
-            "##teamcity[inspection typeId='no-console' message='line 1, col 1, |'|n|r|x|l|p|||[|]' file='testfile.js' line='1' SEVERITY='ERROR']"
-          )
+            "##teamcity[inspection typeId='no-console' message='line 1, col 1, |'|n|r|x|l|p|||[|]' file='testfile.js' line='1' SEVERITY='ERROR']",
+          ),
         );
       });
 
@@ -136,9 +130,7 @@ describe('formatter', function () {
         process.env.ESLINT_TEAMCITY_ERROR_STATISTICS_NAME = 'process.env errors';
         const output = format(eslintInput);
         assert.ok(
-          output.includes(
-            "##teamcity[buildStatisticValue key='process.env errors' value='2']"
-          )
+          output.includes("##teamcity[buildStatisticValue key='process.env errors' value='2']"),
         );
       });
 
@@ -146,9 +138,7 @@ describe('formatter', function () {
         process.env.ESLINT_TEAMCITY_WARNING_STATISTICS_NAME = 'process.env warnings';
         const output = format(eslintInput);
         assert.ok(
-          output.includes(
-            "##teamcity[buildStatisticValue key='process.env warnings' value='0']"
-          )
+          output.includes("##teamcity[buildStatisticValue key='process.env warnings' value='0']"),
         );
       });
     });
@@ -197,18 +187,14 @@ describe('formatter', function () {
       it('sets the error count name', () => {
         const output = format(eslintInput);
         assert.ok(
-          output.includes(
-            "##teamcity[buildStatisticValue key='ESLint Error Count' value='2']"
-          )
+          output.includes("##teamcity[buildStatisticValue key='ESLint Error Count' value='2']"),
         );
       });
 
       it('sets the warning count name', function () {
         const output = format(eslintInput);
         assert.ok(
-          output.includes(
-            "##teamcity[buildStatisticValue key='ESLint Warning Count' value='0']"
-          )
+          output.includes("##teamcity[buildStatisticValue key='ESLint Warning Count' value='0']"),
         );
       });
     });

@@ -22,10 +22,11 @@
     }
   },
   "scripts": {
-    "lint": "eslint .",
+    "format": "prettier --write \"./src/**/*.js\" \"./test/**/*.js\"",
+    "format:check": "prettier --check \"./src/**/*.js\" \"./test/**/*.js\"",
+    "lint": "npm run lint:eslint && npm run format:check",
+    "lint:eslint": "eslint .",
     "prepare": "husky",
-    "prettify": "prettier --write \"./src/**/*.js\" --write \"./test/**/*.js\"",
-    "pretty-quick": "pretty-quick --staged --pattern \"**/*.*(js|ts)\"",
     "test": "node --test \"./test/**/*.spec.js\"",
     "test:coverage": "node --test --experimental-test-coverage \"./test/**/*.spec.js\""
   },
@@ -39,12 +40,14 @@
     "formatter",
     "linting"
   ],
+  "engines": {
+    "npm": ">=11.10.0"
+  },
   "devDependencies": {
     "@types/eslint": "^9.6.1",
-    "eslint": "^9.30.0",
-    "eslint-plugin-import": "^2.28.0",
+    "eslint": "^10.3.0",
+    "eslint-plugin-import-x": "^4.16.2",
     "husky": "^9.0.0",
-    "prettier": "^3.0.0",
-    "pretty-quick": "^4.0.0"
+    "prettier": "^3.0.0"
   }
 }

@@ -47,15 +47,13 @@ module.exports = (results, config) => {
     // Group errors and warnings together per file
     if (errorsList.length) {
       const errors = utils.escapeTeamCityString(errorsList.join('\n'));
-      lines.push(
-        `##teamcity[testFailed name='${reportName}: ${filePath}' message='${errors}']`
-      );
+      lines.push(`##teamcity[testFailed name='${reportName}: ${filePath}' message='${errors}']`);
     }
 
     if (warningsList.length) {
       const warnings = utils.escapeTeamCityString(warningsList.join('\n'));
       lines.push(
-        `##teamcity[testStdOut name='${reportName}: ${filePath}' out='warning: ${warnings}']`
+        `##teamcity[testStdOut name='${reportName}: ${filePath}' out='warning: ${warnings}']`,
       );
     }
 

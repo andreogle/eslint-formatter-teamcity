@@ -30,16 +30,28 @@ function getUserConfig(propNames) {
   const config = JSON.parse(utils.loadPackageJson())['eslint-formatter-teamcity'] || {};
 
   const reporter = resolveConfigValue(
-    propNames.reporter, config.reporter, 'ESLINT_TEAMCITY_REPORTER', 'errors'
+    propNames.reporter,
+    config.reporter,
+    'ESLINT_TEAMCITY_REPORTER',
+    'errors',
   );
   const reportName = resolveConfigValue(
-    propNames.reportName, config['report-name'], 'ESLINT_TEAMCITY_REPORT_NAME', 'ESLint Violations'
+    propNames.reportName,
+    config['report-name'],
+    'ESLINT_TEAMCITY_REPORT_NAME',
+    'ESLint Violations',
   );
   const errorStatisticsName = resolveConfigValue(
-    propNames.errorStatisticsName, config['error-statistics-name'], 'ESLINT_TEAMCITY_ERROR_STATISTICS_NAME', 'ESLint Error Count'
+    propNames.errorStatisticsName,
+    config['error-statistics-name'],
+    'ESLINT_TEAMCITY_ERROR_STATISTICS_NAME',
+    'ESLint Error Count',
   );
   const warningStatisticsName = resolveConfigValue(
-    propNames.warningStatisticsName, config['warning-statistics-name'], 'ESLINT_TEAMCITY_WARNING_STATISTICS_NAME', 'ESLint Warning Count'
+    propNames.warningStatisticsName,
+    config['warning-statistics-name'],
+    'ESLINT_TEAMCITY_WARNING_STATISTICS_NAME',
+    'ESLint Warning Count',
   );
 
   return {
